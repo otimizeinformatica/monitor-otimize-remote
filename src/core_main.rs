@@ -32,12 +32,14 @@ pub fn core_main() -> Option<Vec<String>> {
     if !crate::common::global_init() {
         return None;
     }
-    // Otimize Remote rebrand: APP_NAME default em hbb_common e "RustDesk" (submodulo
-    // do upstream, nao podemos editar). Sobrescrevemos aqui antes de qualquer codigo
-    // ler. Afeta install path (C:\Program Files\Otimize Remote\), service name, log
-    // dirs, window title fallback. custom.txt em runtime ainda pode sobrescrever via
-    // load_custom_client() se setar app-name.
-    *hbb_common::config::APP_NAME.write().unwrap() = "Otimize Remote".to_owned();
+    // Otimize Remote rebrand via custom.txt — mecanismo oficial do RustDesk.
+    // Tentei sobrescrever APP_NAME aqui direto na sessao 2026-04-30 mas misturava
+    // state com lazy_static cached em "RustDesk", deixando o app inconsistente:
+    // apos fechar nao reexecutava, paths conflitavam (Otimize Remote\ vs RustDesk\),
+    // service name divergia, etc.
+    // Solucao correta: distribuir custom.txt assinado junto com o exe. load_custom_client
+    // chamado abaixo lê e seta app-name="Otimize Remote" + server/key no momento certo,
+    // antes de qualquer lazy_static depender de APP_NAME.
     crate::load_custom_client();
     #[cfg(windows)]
     if !crate::platform::windows::bootstrap() {
