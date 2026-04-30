@@ -32,6 +32,12 @@ pub fn core_main() -> Option<Vec<String>> {
     if !crate::common::global_init() {
         return None;
     }
+    // Otimize Remote rebrand: APP_NAME default em hbb_common e "RustDesk" (submodulo
+    // do upstream, nao podemos editar). Sobrescrevemos aqui antes de qualquer codigo
+    // ler. Afeta install path (C:\Program Files\Otimize Remote\), service name, log
+    // dirs, window title fallback. custom.txt em runtime ainda pode sobrescrever via
+    // load_custom_client() se setar app-name.
+    *hbb_common::config::APP_NAME.write().unwrap() = "Otimize Remote".to_owned();
     crate::load_custom_client();
     #[cfg(windows)]
     if !crate::platform::windows::bootstrap() {
