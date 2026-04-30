@@ -2186,8 +2186,10 @@ pub fn read_custom_client(config: &str) {
     };
     // Otimize Remote signing key — Ed25519 pub gerado 2026-04-29 (otimizeinformatica/monitor-otimize-remote).
     // Privada (libsodium 64-byte) fica em ~/.ssh/otimize-remote-signing.key do operador.
-    // NUNCA versionar a privada. Original RustDesk Pro key: "5Qbwsde3unUcJBtrx9ZkvUmwFNoExHzpryHuPUdqlWM=".
-    const KEY: &str = "HepXwBETRiD+jwl0Nju1wuRqnZtt5c/ZQoJeUY7Gk90=";
+    // NUNCA versionar a privada. Original RustDesk Pro key: "HepXwBETRiD+jwl0Nju1wuRqnZtt5c/ZQoJeUY7Gk90=".
+    // gen-otimize-custom-txt.py em D:\Replicador\scripts\ assina o custom.txt com a privada
+    // que corresponde a essa public key — TROCAR JUNTAS sempre.
+    const KEY: &str = "o+LhEXBUWeMZGkAW4OQwkuWWETDNKaoM2MZRcOkCtEs=";
     let Some(pk) = get_rs_pk(KEY) else {
         log::error!("Failed to parse public key of custom client");
         return;
